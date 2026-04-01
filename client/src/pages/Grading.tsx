@@ -4,18 +4,25 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { FileCheck, Loader2, AlertTriangle, CheckCircle, Clock } from "lucide-react";
+import {
+  FileCheck, Loader2, AlertTriangle, CheckCircle, Clock,
+  ListChecks, PenLine, Code2, ArrowRight
+} from "lucide-react";
 import { useState } from "react";
 import { Streamdown } from "streamdown";
 import { toast } from "sonner";
+import ObjectiveQuiz from "./grading/ObjectiveQuiz";
+import ShortAnswerQuiz from "./grading/ShortAnswerQuiz";
+import CodeQuiz from "./grading/CodeQuiz";
+
+type QuizMode = null | "objective" | "shortAnswer" | "code";
 
 export default function Grading() {
   const [examTitle, setExamTitle] = useState("");
   const [examContent, setExamContent] = useState("");
-  const [activeTab, setActiveTab] = useState("submit");
+  const [activeTab, setActiveTab] = useState("practice");
+  const [quizMode, setQuizMode] = useState<QuizMode>(null);
 
   const { data: gradingList, refetch } = trpc.grading.list.useQuery();
 
@@ -47,6 +54,29 @@ export default function Grading() {
     published: { label: "已发布", color: "bg-purple-100 text-purple-700", icon: CheckCircle },
   };
 
+  // If a quiz mode is active, render the corresponding quiz component
+  if (quizMode === "objective") {
+    return (
+      <div className="space-y-6">
+        <ObjectiveQuiz onBack={() => setQuizMode(null)} />
+      </div>
+    );
+  }
+  if (quizMode === "shortAnswer") {
+    return (
+      <div className="space-y-6">
+        <ShortAnswerQuiz onBack={() => setQuizMode(null)} />
+      </div>
+    );
+  }
+  if (quizMode === "code") {
+    return (
+      <div className="space-y-6">
+        <CodeQuiz onBack={() => setQuizMode(null)} />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <div>
@@ -58,10 +88,107 @@ export default function Grading() {
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList>
+          <TabsTrigger value="practice">题型练习</TabsTrigger>
           <TabsTrigger value="submit">提交批改</TabsTrigger>
           <TabsTrigger value="history">批改记录</TabsTrigger>
         </TabsList>
 
+        {/* ===== 题型练习 Tab ===== */}
+        <TabsContent value="practice" className="mt-4">
+          <div className="grid gap-4 md:grid-cols-3">
+            {/* 客观题 */}
+            <Card
+              className="group cursor-pointer transition-all hover:shadow-lg hover:border-blue-300 hover:-translate-y-1"
+              onClick={() => setQuizMode("objective")}
+            >
+              <CardHeader className="pb-3">
+                <div className="flex items-center gap-3">
+                  <div className="size-12 rounded-xl bg-blue-100 flex items-center justify-center group-hover:bg-blue-200 transition-colors">
+                    <ListChecks className="h-6 w-6 text-blue-600" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-base">客观题</CardTitle>
+                    <CardDescription className="text-xs mt-0.5">选择题 · 即时判分</CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">
+                  5 道单选题 + 5 道多选题，涵盖 Python 基础知识。选择答案后即时判分，答错自动显示详细解析。
+                </p>
+                <div className="flex items-center justify-between">
+                  <div className="flex gap-1.5">
+                    <Badge variant="secondary" className="text-xs">10 题</Badge>
+                    <Badge className="bg-blue-100 text-blue-700 text-xs">Python 基础</Badge>
+                  </div>
+                  <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-blue-600 transition-colors" />
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* 简答题 */}
+            <Card
+              className="group cursor-pointer transition-all hover:shadow-lg hover:border-green-300 hover:-translate-y-1"
+              onClick={() => setQuizMode("shortAnswer")}
+            >
+              <CardHeader className="pb-3">
+                <div className="flex items-center gap-3">
+                  <div className="size-12 rounded-xl bg-green-100 flex items-center justify-center group-hover:bg-green-200 transition-colors">
+                    <PenLine className="h-6 w-6 text-green-600" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-base">简答题</CardTitle>
+                    <CardDescription className="text-xs mt-0.5">文字作答 · AI 批改</CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">
+                  3 道 Python 进阶简答题，涵盖装饰器、列表推导式、GIL 等核心概念。AI 逐点评分并给出改进建议。
+                </p>
+                <div className="flex items-center justify-between">
+                  <div className="flex gap-1.5">
+                    <Badge variant="secondary" className="text-xs">3 题</Badge>
+                    <Badge className="bg-green-100 text-green-700 text-xs">Python 进阶</Badge>
+                  </div>
+                  <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-green-600 transition-colors" />
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* 代码题 */}
+            <Card
+              className="group cursor-pointer transition-all hover:shadow-lg hover:border-orange-300 hover:-translate-y-1"
+              onClick={() => setQuizMode("code")}
+            >
+              <CardHeader className="pb-3">
+                <div className="flex items-center gap-3">
+                  <div className="size-12 rounded-xl bg-orange-100 flex items-center justify-center group-hover:bg-orange-200 transition-colors">
+                    <Code2 className="h-6 w-6 text-orange-600" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-base">代码题</CardTitle>
+                    <CardDescription className="text-xs mt-0.5">编程实战 · 全面审查</CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">
+                  双指针、动态规划、数组各 1 题。支持 8 种语言，AI 从正确性、复杂度、代码质量等六维度全面审查。
+                </p>
+                <div className="flex items-center justify-between">
+                  <div className="flex gap-1.5">
+                    <Badge variant="secondary" className="text-xs">3 题</Badge>
+                    <Badge className="bg-orange-100 text-orange-700 text-xs">算法编程</Badge>
+                  </div>
+                  <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-orange-600 transition-colors" />
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+
+        {/* ===== 提交批改 Tab ===== */}
         <TabsContent value="submit" className="mt-4">
           <Card>
             <CardHeader>
@@ -109,6 +236,7 @@ export default function Grading() {
           </Card>
         </TabsContent>
 
+        {/* ===== 批改记录 Tab ===== */}
         <TabsContent value="history" className="mt-4">
           <div className="space-y-4">
             {gradingList?.map((grading) => {
@@ -139,15 +267,12 @@ export default function Grading() {
                   {parsedResult && (
                     <CardContent>
                       <div className="space-y-3">
-                        {/* Summary */}
                         {parsedResult.summary && (
                           <div className="p-3 bg-muted rounded-lg">
                             <p className="text-sm font-medium mb-1">总体评价</p>
                             <Streamdown>{parsedResult.summary}</Streamdown>
                           </div>
                         )}
-
-                        {/* Question Details */}
                         {parsedResult.questions?.map((q: any, i: number) => (
                           <div key={i} className="p-3 border rounded-lg">
                             <div className="flex items-center justify-between mb-2">
@@ -172,30 +297,22 @@ export default function Grading() {
                             )}
                           </div>
                         ))}
-
-                        {/* Weak Points Summary */}
                         {parsedResult.weakPoints?.length > 0 && (
                           <div className="p-3 bg-red-50 rounded-lg">
                             <p className="text-sm font-medium text-red-700 mb-2">知识薄弱点</p>
                             <div className="flex gap-1 flex-wrap">
                               {parsedResult.weakPoints.map((wp: string, i: number) => (
-                                <Badge key={i} variant="secondary" className="text-xs">
-                                  {wp}
-                                </Badge>
+                                <Badge key={i} variant="secondary" className="text-xs">{wp}</Badge>
                               ))}
                             </div>
                           </div>
                         )}
-
-                        {/* Suggestions */}
                         {parsedResult.suggestions && (
                           <div className="p-3 bg-blue-50 rounded-lg">
                             <p className="text-sm font-medium text-blue-700 mb-1">改进建议</p>
                             <p className="text-sm text-blue-600">{parsedResult.suggestions}</p>
                           </div>
                         )}
-
-                        {/* Review Note */}
                         {grading.reviewNote && (
                           <div className="p-3 bg-green-50 rounded-lg">
                             <p className="text-sm font-medium text-green-700 mb-1">教师评语</p>
