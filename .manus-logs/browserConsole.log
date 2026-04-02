@@ -1,0 +1,38 @@
+[2026-04-02T15:57:40.732Z] {"timestamp":1775145458701,"level":"DEBUG","args":["[Manus] Debug collector initialized (no rrweb, UI events only)"],"stack":null}
+[2026-04-02T15:57:40.732Z] {"timestamp":1775145458756,"level":"DEBUG","args":["[vite] connected."],"stack":null}
+[2026-04-02T15:57:40.732Z] {"timestamp":1775145459105,"level":"INFO","args":["%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools","font-weight:bold"],"stack":null}
+[2026-04-02T15:59:31.078Z] {"timestamp":1775145569038,"level":"DEBUG","args":["[Manus] Debug collector initialized (no rrweb, UI events only)"],"stack":null}
+[2026-04-02T15:59:31.078Z] {"timestamp":1775145569058,"level":"DEBUG","args":["[vite] connected."],"stack":null}
+[2026-04-02T15:59:31.078Z] {"timestamp":1775145569274,"level":"INFO","args":["%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools","font-weight:bold"],"stack":null}
+[2026-04-02T16:05:07.739Z] {"timestamp":1775145905674,"level":"DEBUG","args":["[Manus] Debug collector initialized (no rrweb, UI events only)"],"stack":null}
+[2026-04-02T16:05:07.739Z] {"timestamp":1775145905906,"level":"DEBUG","args":["[vite] connected."],"stack":null}
+[2026-04-02T16:05:07.739Z] {"timestamp":1775145906720,"level":"INFO","args":["%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools","font-weight:bold"],"stack":null}
+[2026-04-02T16:29:35.203Z] {"timestamp":1775147373172,"level":"DEBUG","args":["[Manus] Debug collector initialized (no rrweb, UI events only)"],"stack":null}
+[2026-04-02T16:29:35.203Z] {"timestamp":1775147373703,"level":"INFO","args":["%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools","font-weight:bold"],"stack":null}
+[2026-04-02T16:29:37.187Z] {"timestamp":1775147375351,"level":"DEBUG","args":["[vite] connected."],"stack":null}
+[2026-04-02T16:30:05.518Z] {"timestamp":1775147403503,"level":"DEBUG","args":["[Manus] Debug collector initialized (no rrweb, UI events only)"],"stack":null}
+[2026-04-02T16:30:05.519Z] {"timestamp":1775147403673,"level":"INFO","args":["%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools","font-weight:bold"],"stack":null}
+[2026-04-02T16:30:05.519Z] {"timestamp":1775147403981,"level":"DEBUG","args":["[vite] connected."],"stack":null}
+[2026-04-02T16:37:10.860Z] {"timestamp":1775147828792,"level":"DEBUG","args":["[Manus] Debug collector initialized (no rrweb, UI events only)"],"stack":null}
+[2026-04-02T16:37:10.860Z] {"timestamp":1775147829038,"level":"DEBUG","args":["[vite] connected."],"stack":null}
+[2026-04-02T16:37:10.860Z] {"timestamp":1775147829330,"level":"INFO","args":["%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools","font-weight:bold"],"stack":null}
+[2026-04-02T16:38:27.993Z] {"timestamp":1775147905924,"level":"DEBUG","args":["[Manus] Debug collector initialized (no rrweb, UI events only)"],"stack":null}
+[2026-04-02T16:38:27.993Z] {"timestamp":1775147906244,"level":"INFO","args":["%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools","font-weight:bold"],"stack":null}
+[2026-04-02T16:38:27.993Z] {"timestamp":1775147907070,"level":"DEBUG","args":["[vite] connected."],"stack":null}
+[2026-04-02T16:43:44.918Z] {"timestamp":1775148222902,"level":"DEBUG","args":["[Manus] Debug collector initialized (no rrweb, UI events only)"],"stack":null}
+[2026-04-02T16:43:44.918Z] {"timestamp":1775148222925,"level":"DEBUG","args":["[vite] connected."],"stack":null}
+[2026-04-02T16:43:44.918Z] {"timestamp":1775148223386,"level":"INFO","args":["%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools","font-weight:bold"],"stack":null}
+[2026-04-02T16:52:36.778Z] {"timestamp":1775148754732,"level":"DEBUG","args":["[Manus] Debug collector initialized (no rrweb, UI events only)"],"stack":null}
+[2026-04-02T16:52:36.778Z] {"timestamp":1775148754768,"level":"DEBUG","args":["[vite] connected."],"stack":null}
+[2026-04-02T16:52:36.778Z] {"timestamp":1775148755118,"level":"INFO","args":["%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools","font-weight:bold"],"stack":null}
+[2026-04-02T17:02:15.129Z] {"timestamp":1775149333053,"level":"DEBUG","args":["[Manus] Debug collector initialized (no rrweb, UI events only)"],"stack":null}
+[2026-04-02T17:02:15.130Z] {"timestamp":1775149333111,"level":"DEBUG","args":["[vite] connected."],"stack":null}
+[2026-04-02T17:02:15.130Z] {"timestamp":1775149333448,"level":"INFO","args":["%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools","font-weight:bold"],"stack":null}
+[2026-04-02T17:02:29.064Z] {"timestamp":1775149348405,"level":"ERROR","args":["[API Query Error]",{"type":"Error","message":"Failed query: select count(*) from `knowledge_base`\nparams: ","stack":"TRPCClientError: Failed query: select count(*) from `knowledge_base`\nparams: \n    at TRPCClientError2.from (http://localhost:3001/@fs/home/ubuntu/EduAgent/node_modules/.vite/deps/chunk-FDQL2KDZ.js?v=fab47a74:2049:44)\n    at http://localhost:3001/@fs/home/ubuntu/EduAgent/node_modules/.vite/deps/chunk-FDQL2KDZ.js?v=fab47a74:2446:44"}],"stack":"Error\n    at console.<computed> [as error] (http://localhost:3001/__manus__/debug-collector.js:391:37)\n    at http://localhost:3001/src/main.tsx?v=L3koVpz62OMl8VsgDOLWA:23:13\n    at http://localhost:3001/@fs/home/ubuntu/EduAgent/node_modules/.vite/deps/chunk-EDI67GV2.js?v=fab47a74:2747:9\n    at Set.forEach (<anonymous>)\n    at http://localhost:3001/@fs/home/ubuntu/EduAgent/node_modules/.vite/deps/chunk-EDI67GV2.js?v=fab47a74:2746:22\n    at Object.batch (http://localhost:3001/@fs/home/ubuntu/EduAgent/node_modules/.vite/deps/chunk-EDI67GV2.js?v=fab47a74:653:18)\n    at QueryCache.notify (http://localhost:3001/@fs/home/ubuntu/EduAgent/node_modules/.vite/deps/chunk-EDI67GV2.js?v=fab47a74:2745:19)\n    at http://localhost:3001/@fs/home/ubuntu/EduAgent/node_modules/.vite/deps/chunk-EDI67GV2.js?v=fab47a74:1280:19\n    at Object.batch (http://localhost:3001/@fs/home/ubuntu/EduAgent/node_modules/.vite/deps/chunk-EDI67GV2.js?v=fab47a74:653:18)\n    at #dispatch (http://localhost:3001/@fs/home/ubuntu/EduAgent/node_modules/.vite/deps/chunk-EDI67GV2.js?v=fab47a74:1276:19)"}
+[2026-04-02T17:05:21.553Z] {"timestamp":1775149508445,"level":"LOG","args":["[vite] server connection lost. Polling for restart..."],"stack":null}
+[2026-04-02T17:05:29.267Z] {"timestamp":1775149525337,"level":"DEBUG","args":["[Manus] Debug collector initialized (no rrweb, UI events only)"],"stack":null}
+[2026-04-02T17:05:29.272Z] {"timestamp":1775149525750,"level":"DEBUG","args":["[vite] connected."],"stack":null}
+[2026-04-02T17:05:43.503Z] {"timestamp":1775149537418,"level":"INFO","args":["%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools","font-weight:bold"],"stack":null}
+[2026-04-02T17:05:58.057Z] {"timestamp":1775149555582,"level":"DEBUG","args":["[Manus] Debug collector initialized (no rrweb, UI events only)"],"stack":null}
+[2026-04-02T17:05:59.591Z] {"timestamp":1775149557936,"level":"DEBUG","args":["[vite] connected."],"stack":null}
+[2026-04-02T17:05:59.591Z] {"timestamp":1775149558295,"level":"INFO","args":["%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools","font-weight:bold"],"stack":null}

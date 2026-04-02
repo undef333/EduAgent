@@ -14,6 +14,7 @@ import KnowledgeBase from "./pages/KnowledgeBase";
 import GradingReview from "./pages/GradingReview";
 import AdminUsers from "./pages/AdminUsers";
 import History from "./pages/History";
+import Feed from "./pages/Feed";
 
 function Router() {
   return (
@@ -24,6 +25,7 @@ function Router() {
         <Route path="/grading" component={Grading} />
         <Route path="/resume" component={ResumeReview} />
         <Route path="/interview" component={Interview} />
+        <Route path="/feed" component={Feed} />
         <Route path="/knowledge" component={KnowledgeBase} />
         <Route path="/grading-review" component={GradingReview} />
         <Route path="/admin/users" component={AdminUsers} />

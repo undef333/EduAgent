@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduAgent - 信息速递功能演示</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            background: #f0f0f0;
+            color: #333;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .tab-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .articles-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .article-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .article-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .article-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 8px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .article-content {
+            flex: 1;
+        }
+
+        .article-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .article-summary {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 12px;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 12px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            background: #f0f0f0;
+            color: #666;
+            margin-right: 10px;
+        }
+
+        .badge.quantum { background: #e3f2fd; color: #1976d2; }
+        .badge.machine { background: #f3e5f5; color: #7b1fa2; }
+        .badge.mind { background: #e8f5e9; color: #388e3c; }
+
+        .read-more {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .read-more:hover {
+            text-decoration: underline;
+        }
+
+        .jobs-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .job-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .job-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .job-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 16px;
+        }
+
+        .job-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .job-company {
+            font-size: 14px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        .category-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .category-badge.research { background: #e3f2fd; color: #1976d2; }
+        .category-badge.product { background: #f3e5f5; color: #7b1fa2; }
+        .category-badge.operations { background: #e8f5e9; color: #388e3c; }
+
+        .job-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .detail-item {
+            font-size: 13px;
+        }
+
+        .detail-label {
+            color: #999;
+            margin-bottom: 4px;
+        }
+
+        .detail-value {
+            color: #333;
+            font-weight: 500;
+        }
+
+        .job-description {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .job-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .job-date {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: 1px solid #667eea;
+            border-radius: 6px;
+            background: white;
+            color: #667eea;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .companies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .company-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .company-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .company-logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 16px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .company-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .company-desc {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 16px;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .follow-btn {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .follow-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .follow-btn.followed {
+            background: #f0f0f0;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .job-details {
+                grid-template-columns: 1fr;
+            }
+
+            .article-card {
+                flex-direction: column;
+            }
+
+            .article-image {
+                width: 100%;
+                height: 200px;
+            }
+
+            .companies-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📰 信息速递</h1>
+            <p>行业资讯 · 岗位机会 · 公司关注</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('articles')">📰 行业资讯</button>
+            <button class="tab-btn" onclick="switchTab('jobs')">💼 岗位推荐</button>
+            <button class="tab-btn" onclick="switchTab('companies')">🎯 我的关注</button>
+        </div>
+
+        <!-- 行业资讯 -->
+        <div id="articles" class="tab-content active">
+            <div class="articles-grid">
+                <div class="article-card">
+                    <div style="width: 120px; height: 120px; border-radius: 8px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); flex-shrink: 0;"></div>
+                    <div class="article-content">
+                        <div class="article-title">GPT-5 即将发布，OpenAI 透露最新进展</div>
+                        <div class="article-summary">OpenAI 在最新的技术分享会上透露了 GPT-5 的开发进展，新模型在推理能力和多模态理解方面有重大突破...</div>
+                        <div class="article-meta">
+                            <div>
+                                <span class="badge quantum">量子位</span>
+                                <span style="color: #999;">3 小时前</span>
+                            </div>
+                            <a href="#" class="read-more">阅读原文 →</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="article-card">
+                    <div style="width: 120px; height: 120px; border-radius: 8px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); flex-shrink: 0;"></div>
+                    <div class="article-content">
+                        <div class="article-title">Meta 发布 Llama 3.2，开源模型性能超越 GPT-4</div>
+                        <div class="article-summary">Meta 正式发布 Llama 3.2 系列模型，在多个基准测试中超越 GPT-4 的表现，推动开源 AI 发展...</div>
+                        <div class="article-meta">
+                            <div>
+                                <span class="badge machine">机器之心</span>
+                                <span style="color: #999;">5 小时前</span>
+                            </div>
+                            <a href="#" class="read-more">阅读原文 →</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="article-card">
+                    <div style="width: 120px; height: 120px; border-radius: 8px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); flex-shrink: 0;"></div>
+                    <div class="article-content">
+                        <div class="article-title">AI 芯片竞争加剧，英伟达市场份额面临挑战</div>
+                        <div class="article-summary">随着 AMD、Intel 等厂商加大 AI 芯片投入，英伟达的市场垄断地位开始被打破，行业格局发生变化...</div>
+                        <div class="article-meta">
+                            <div>
+                                <span class="badge mind">心智元</span>
+                                <span style="color: #999;">8 小时前</span>
+                            </div>
+                            <a href="#" class="read-more">阅读原文 →</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="article-card">
+                    <div style="width: 120px; height: 120px; border-radius: 8px; background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); flex-shrink: 0;"></div>
+                    <div class="article-content">
+                        <div class="article-title">大模型应用落地加速，企业级 AI 市场爆发</div>
+                        <div class="article-summary">2024 年企业级 AI 应用市场规模达到 500 亿美元，各行业都在积极探索大模型的商业化应用...</div>
+                        <div class="article-meta">
+                            <div>
+                                <span class="badge quantum">量子位</span>
+                                <span style="color: #999;">12 小时前</span>
+                            </div>
+                            <a href="#" class="read-more">阅读原文 →</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="article-card">
+                    <div style="width: 120px; height: 120px; border-radius: 8px; background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); flex-shrink: 0;"></div>
+                    <div class="article-content">
+                        <div class="article-title">AI 安全成为新焦点，欧盟 AI 法案正式生效</div>
+                        <div class="article-summary">欧盟 AI 法案正式生效，对高风险 AI 系统进行严格监管，全球 AI 治理框架逐步完善...</div>
+                        <div class="article-meta">
+                            <div>
+                                <span class="badge machine">机器之心</span>
+                                <span style="color: #999;">1 天前</span>
+                            </div>
+                            <a href="#" class="read-more">阅读原文 →</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 岗位推荐 -->
+        <div id="jobs" class="tab-content">
+            <div class="jobs-grid">
+                <div class="job-card">
+                    <div class="job-header">
+                        <div>
+                            <div class="job-title">高级 AI 研究员</div>
+                            <div class="job-company">B 公司</div>
+                        </div>
+                        <span class="category-badge research">研究员</span>
+                    </div>
+                    <div class="job-details">
+                        <div class="detail-item">
+                            <div class="detail-label">工作地点</div>
+                            <div class="detail-value">北京 / 远程</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">薪资范围</div>
+                            <div class="detail-value">50k-80k</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">工作经验</div>
+                            <div class="detail-value">5 年以上</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">学历要求</div>
+                            <div class="detail-value">硕士及以上</div>
+                        </div>
+                    </div>
+                    <div class="job-description">
+                        负责大模型的研究和优化，包括模型架构设计、算法创新、性能优化等工作。要求有深厚的机器学习基础和论文发表经验。
+                    </div>
+                    <div class="job-footer">
+                        <span class="job-date">发布于 2 小时前</span>
+                        <button class="btn">查看详情</button>
+                    </div>
+                </div>
+
+                <div class="job-card">
+                    <div class="job-header">
+                        <div>
+                            <div class="job-title">产品经理 - AI 平台</div>
+                            <div class="job-company">A 公司</div>
+                        </div>
+                        <span class="category-badge product">产品经理</span>
+                    </div>
+                    <div class="job-details">
+                        <div class="detail-item">
+                            <div class="detail-label">工作地点</div>
+                            <div class="detail-value">上海</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">薪资范围</div>
+                            <div class="detail-value">30k-50k</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">工作经验</div>
+                            <div class="detail-value">3 年以上</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">学历要求</div>
+                            <div class="detail-value">本科及以上</div>
+                        </div>
+                    </div>
+                    <div class="job-description">
+                        负责 AI 产品的规划和设计，与技术团队合作完成产品需求，进行用户研究和市场分析，推动产品迭代。
+                    </div>
+                    <div class="job-footer">
+                        <span class="job-date">发布于 4 小时前</span>
+                        <button class="btn">查看详情</button>
+                    </div>
+                </div>
+
+                <div class="job-card">
+                    <div class="job-header">
+                        <div>
+                            <div class="job-title">运营 - 社区增长</div>
+                            <div class="job-company">T 公司</div>
+                        </div>
+                        <span class="category-badge operations">运营</span>
+                    </div>
+                    <div class="job-details">
+                        <div class="detail-item">
+                            <div class="detail-label">工作地点</div>
+                            <div class="detail-value">深圳</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">薪资范围</div>
+                            <div class="detail-value">20k-35k</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">工作经验</div>
+                            <div class="detail-value">2 年以上</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">学历要求</div>
+                            <div class="detail-value">本科及以上</div>
+                        </div>
+                    </div>
+                    <div class="job-description">
+                        负责社区运营和用户增长，制定增长策略，组织社区活动，分析用户数据，提升用户留存和活跃度。
+                    </div>
+                    <div class="job-footer">
+                        <span class="job-date">发布于 6 小时前</span>
+                        <button class="btn">查看详情</button>
+                    </div>
+                </div>
+
+                <div class="job-card">
+                    <div class="job-header">
+                        <div>
+                            <div class="job-title">机器学习工程师</div>
+                            <div class="job-company">D 公司</div>
+                        </div>
+                        <span class="category-badge research">研究员</span>
+                    </div>
+                    <div class="job-details">
+                        <div class="detail-item">
+                            <div class="detail-label">工作地点</div>
+                            <div class="detail-value">杭州 / 远程</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">薪资范围</div>
+                            <div class="detail-value">40k-70k</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">工作经验</div>
+                            <div class="detail-value">3 年以上</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">学历要求</div>
+                            <div class="detail-value">本科及以上</div>
+                        </div>
+                    </div>
+                    <div class="job-description">
+                        负责推荐系统的开发和优化，构建机器学习模型，进行数据分析和特征工程，提升推荐效果。
+                    </div>
+                    <div class="job-footer">
+                        <span class="job-date">发布于 8 小时前</span>
+                        <button class="btn">查看详情</button>
+                    </div>
+                </div>
+
+                <div class="job-card">
+                    <div class="job-header">
+                        <div>
+                            <div class="job-title">产品运营</div>
+                            <div class="job-company">M 公司</div>
+                        </div>
+                        <span class="category-badge operations">运营</span>
+                    </div>
+                    <div class="job-details">
+                        <div class="detail-item">
+                            <div class="detail-label">工作地点</div>
+                            <div class="detail-value">北京</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">薪资范围</div>
+                            <div class="detail-value">25k-40k</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">工作经验</div>
+                            <div class="detail-value">1 年以上</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">学历要求</div>
+                            <div class="detail-value">本科及以上</div>
+                        </div>
+                    </div>
+                    <div class="job-description">
+                        负责产品的日常运营工作，包括用户反馈收集、数据分析、活动策划等，推动产品的持续改进。
+                    </div>
+                    <div class="job-footer">
+                        <span class="job-date">发布于 10 小时前</span>
+                        <button class="btn">查看详情</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 我的关注 -->
+        <div id="companies" class="tab-content">
+            <div class="companies-grid">
+                <div class="company-card">
+                    <div class="company-logo">B</div>
+                    <div class="company-name">B 公司</div>
+                    <div class="company-desc">云计算和 AI 平台领导者，致力于为企业提供智能解决方案</div>
+                    <button class="follow-btn" onclick="toggleFollow(this)">❤️ 关注</button>
+                </div>
+
+                <div class="company-card">
+                    <div class="company-logo" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">A</div>
+                    <div class="company-name">A 公司</div>
+                    <div class="company-desc">互联网科技企业，提供社交、内容和商务服务</div>
+                    <button class="follow-btn" onclick="toggleFollow(this)">❤️ 关注</button>
+                </div>
+
+                <div class="company-card">
+                    <div class="company-logo" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">T</div>
+                    <div class="company-name">T 公司</div>
+                    <div class="company-desc">社交和内容平台，连接全球用户的信息交流</div>
+                    <button class="follow-btn" onclick="toggleFollow(this)">❤️ 关注</button>
+                </div>
+
+                <div class="company-card">
+                    <div class="company-logo" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">D</div>
+                    <div class="company-name">D 公司</div>
+                    <div class="company-desc">电商和本地服务平台，打造生活服务生态</div>
+                    <button class="follow-btn" onclick="toggleFollow(this)">❤️ 关注</button>
+                </div>
+
+                <div class="company-card">
+                    <div class="company-logo" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">M</div>
+                    <div class="company-name">M 公司</div>
+                    <div class="company-desc">移动互联网和游戏企业，创造创新的娱乐体验</div>
+                    <button class="follow-btn" onclick="toggleFollow(this)">❤️ 关注</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabName) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        function toggleFollow(button) {
+            if (button.classList.contains('followed')) {
+                button.classList.remove('followed');
+                button.textContent = '❤️ 关注';
+            } else {
+                button.classList.add('followed');
+                button.textContent = '✓ 已关注';
+            }
+        }
+    </script>
+</body>
+</html>

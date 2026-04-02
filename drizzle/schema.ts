@@ -11,8 +11,6 @@ export const users = mysqlTable("users", {
   email: varchar("email", { length: 320 }),
   loginMethod: varchar("loginMethod", { length: 64 }),
   role: mysqlEnum("role", ["user", "admin"]).default("user").notNull(),
-  /** Extended role for EduAgent: student, teacher, admin */
-  eduRole: mysqlEnum("eduRole", ["student", "teacher", "admin"]).default("student").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
   lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),
@@ -141,3 +139,71 @@ export const lowConfidenceQueue = mysqlTable("low_confidence_queue", {
 });
 
 export type LowConfidenceItem = typeof lowConfidenceQueue.$inferSelect;
+
+/**
+ * Companies for job feed
+ */
+export const companies = mysqlTable("companies", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 100 }).notNull().unique(),
+  logo: text("logo"),
+  description: text("description"),
+  website: varchar("website", { length: 255 }),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type Company = typeof companies.$inferSelect;
+export type InsertCompany = typeof companies.$inferInsert;
+
+/**
+ * Job postings
+ */
+export const jobPostings = mysqlTable("job_postings", {
+  id: int("id").autoincrement().primaryKey(),
+  companyId: int("companyId").notNull(),
+  title: varchar("title", { length: 255 }).notNull(),
+  category: mysqlEnum("category", ["research", "product", "operations"]).notNull(),
+  location: varchar("location", { length: 255 }),
+  salaryMin: int("salaryMin"),
+  salaryMax: int("salaryMax"),
+  experience: varchar("experience", { length: 100 }),
+  education: varchar("education", { length: 100 }),
+  description: text("description"),
+  requirements: text("requirements"),
+  publishedAt: timestamp("publishedAt").defaultNow().notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type JobPosting = typeof jobPostings.$inferSelect;
+export type InsertJobPosting = typeof jobPostings.$inferInsert;
+
+/**
+ * Industry articles
+ */
+export const industryArticles = mysqlTable("industry_articles", {
+  id: int("id").autoincrement().primaryKey(),
+  title: varchar("title", { length: 500 }).notNull(),
+  summary: text("summary"),
+  source: mysqlEnum("source", ["quantum_bit", "machine_heart", "mind_element"]).notNull(),
+  sourceUrl: text("sourceUrl").notNull(),
+  imageUrl: text("imageUrl"),
+  publishedAt: timestamp("publishedAt").defaultNow().notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type IndustryArticle = typeof industryArticles.$inferSelect;
+export type InsertIndustryArticle = typeof industryArticles.$inferInsert;
+
+/**
+ * User followed companies
+ */
+export const userFollowedCompanies = mysqlTable("user_followed_companies", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  companyId: int("companyId").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type UserFollowedCompany = typeof userFollowedCompanies.$inferSelect;
+export type InsertUserFollowedCompany = typeof userFollowedCompanies.$inferInsert;

@@ -5,6 +5,7 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, protectedProcedure, adminProcedure, router } from "./_core/trpc";
 import * as db from "./db";
+import * as feedDb from "./feedDb";
 import { qaAgent, gradingAgent, resumeReviewAgent, interviewAgent, generateInterviewReport, identifyIntent } from "./agents";
 import { SHORT_ANSWER_QUESTIONS, CODE_QUESTIONS, OBJECTIVE_QUESTIONS } from "./questionBank";
 import { storagePut } from "./storage";
@@ -478,6 +479,55 @@ export const appRouter = router({
         } as any);
         const content = (response.choices[0]?.message?.content as string) || "{}";
         return JSON.parse(content);
+      }),
+  }),
+
+  // ===== Information Feed =====
+  feed: router({
+    companies: protectedProcedure.query(async () => {
+      return feedDb.getAllCompanies();
+    }),
+
+    articles: protectedProcedure
+      .input(z.object({ limit: z.number().default(5) }))
+      .query(async ({ input }) => {
+        return feedDb.getLatestArticles(input.limit);
+      }),
+
+    jobs: protectedProcedure
+      .input(z.object({ limit: z.number().default(20) }))
+      .query(async ({ input }) => {
+        return feedDb.getLatestJobPostings(input.limit);
+      }),
+
+    jobsByCompany: protectedProcedure
+      .input(z.object({ companyId: z.number(), limit: z.number().default(10) }))
+      .query(async ({ input }) => {
+        return feedDb.getJobPostingsByCompanyId(input.companyId, input.limit);
+      }),
+
+    followedCompanies: protectedProcedure.query(async ({ ctx }) => {
+      return feedDb.getUserFollowedCompanies(ctx.user.id);
+    }),
+
+    addFollowedCompany: protectedProcedure
+      .input(z.object({ companyId: z.number() }))
+      .mutation(async ({ ctx, input }) => {
+        const id = await feedDb.addFollowedCompany(ctx.user.id, input.companyId);
+        return { success: !!id, id };
+      }),
+
+    removeFollowedCompany: protectedProcedure
+      .input(z.object({ followedId: z.number() }))
+      .mutation(async ({ ctx, input }) => {
+        const success = await feedDb.removeFollowedCompany(ctx.user.id, input.followedId);
+        return { success };
+      }),
+
+    followedCompaniesJobs: protectedProcedure
+      .input(z.object({ limit: z.number().default(20) }))
+      .query(async ({ ctx, input }) => {
+        return feedDb.getFollowedCompaniesJobs(ctx.user.id, input.limit);
       }),
   }),
 

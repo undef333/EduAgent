@@ -1,4 +1,4 @@
-import { getLoginUrl } from "@/const";
+import { getLoginUrl, getDevLoginUrl } from "@/const";
 import { trpc } from "@/lib/trpc";
 import { TRPCClientError } from "@trpc/client";
 import { useCallback, useEffect, useMemo } from "react";
@@ -9,7 +9,10 @@ type UseAuthOptions = {
 };
 
 export function useAuth(options?: UseAuthOptions) {
-  const { redirectOnUnauthenticated = false, redirectPath = getLoginUrl() } =
+  // 在开发模式下使用开发登录 URL
+  const isDev = import.meta.env.DEV;
+  const defaultLoginUrl = isDev ? getDevLoginUrl() : getLoginUrl();
+  const { redirectOnUnauthenticated = false, redirectPath = defaultLoginUrl } =
     options ?? {};
   const utils = trpc.useUtils();
 
@@ -67,8 +70,8 @@ export function useAuth(options?: UseAuthOptions) {
     if (typeof window === "undefined") return;
     if (window.location.pathname === redirectPath) return;
 
-    window.location.href = redirectPath
-  }, [
+    window.location.href = redirectPath;
+  }, [isDev,
     redirectOnUnauthenticated,
     redirectPath,
     logoutMutation.isPending,

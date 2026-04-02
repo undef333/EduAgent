@@ -38,6 +38,7 @@ import {
   Settings,
   Shield,
   GraduationCap,
+  Newspaper,
 } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
@@ -58,6 +59,7 @@ const mainMenuItems: MenuItem[] = [
   { icon: FileCheck, label: "试卷批改", path: "/grading" },
   { icon: FileText, label: "简历审查", path: "/resume" },
   { icon: Mic, label: "模拟面试", path: "/interview" },
+  { icon: Newspaper, label: "信息速递", path: "/feed" },
 ];
 
 const teacherMenuItems: MenuItem[] = [

@@ -1,5 +1,10 @@
 export { COOKIE_NAME, ONE_YEAR_MS } from "@shared/const";
 
+// Get dev login URL (for local development)
+export const getDevLoginUrl = () => {
+  return `${window.location.origin}/api/dev/login`;
+};
+
 // Generate login URL at runtime so redirect URI reflects the current origin.
 export const getLoginUrl = () => {
   const oauthPortalUrl = import.meta.env.VITE_OAUTH_PORTAL_URL;
